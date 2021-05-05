@@ -1,0 +1,5 @@
+{
+"id":4,
+"author":"Coluche",
+"citation":"Se pencher sur son passé, c'est risquer de tomber dans l'oubli."
+}'

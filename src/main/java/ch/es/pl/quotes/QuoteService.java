@@ -32,21 +32,16 @@ public class QuoteService {
     }
 
     public Quote findById(int id) {
-        Quote quote = null;
-        try {
-            quote = jdbcTemplate.queryForObject(
-                    "select * from quotes where id=?",
-                    new Object[]{id},
-                    (rs, rownum) ->
-                            new Quote(
-                                    rs.getInt("id"),
-                                    rs.getString("author"),
-                                    rs.getString("citation")
-                            )
-            );
-        } catch (EmptyResultDataAccessException e) {
-        }
-        return quote;
+        return jdbcTemplate.queryForObject(
+                "select * from quotes where id=?",
+                new Object[]{id},
+                (rs, rownum) ->
+                        new Quote(
+                                rs.getInt("id"),
+                                rs.getString("author"),
+                                rs.getString("citation")
+                        )
+        );
     }
 
     public int save(Quote quote) {

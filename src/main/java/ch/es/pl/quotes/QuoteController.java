@@ -1,6 +1,7 @@
 package ch.es.pl.quotes;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +23,12 @@ public class QuoteController {
     }
 
     @GetMapping (value = "/quotes/{id}")
-    public ResponseEntity<Quote> ListQuote(@PathVariable int id) {
-        Quote quote = quoteService.findById(id);
-        if (quote != null) {
+    public ResponseEntity<Quote> ListQuote(@PathVariable int id) throws QuoteNotFoundException {
+        try{
+            Quote quote = quoteService.findById(id);
             return new ResponseEntity<Quote>(quote, HttpStatus.OK);
-        } else {
-            return ResponseEntity.notFound().build();
+        } catch (EmptyResultDataAccessException e) {
+           throw new QuoteNotFoundException(id);
         }
     }
 

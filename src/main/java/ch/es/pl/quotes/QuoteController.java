@@ -15,6 +15,9 @@ public class QuoteController {
     @Autowired
     private QuoteDAO quoteDAO;
 
+    @Autowired
+    private QuoteService quoteService;
+
     @RequestMapping(value = "/quotes", method = RequestMethod.GET)
     public ResponseEntity<List<Quote>>  listQuotes() {
         List<Quote> quotes = quoteDAO.findAll();
@@ -36,6 +39,11 @@ public class QuoteController {
                 .buildAndExpand(id)
                 .toUri();
         return ResponseEntity.created(uri).build();
+    }
+    @PostMapping(value = "/all-quotes-or-nothing")
+    public ResponseEntity<Void> addQuotes(@RequestBody List<Quote> quotes) {
+        quoteService.allQuotesOrNothing(quotes);
+        return new ResponseEntity<>(null,HttpStatus.CREATED);
     }
 
 }

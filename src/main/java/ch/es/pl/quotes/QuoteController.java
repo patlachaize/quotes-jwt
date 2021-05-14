@@ -1,7 +1,6 @@
 package ch.es.pl.quotes;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,23 +13,23 @@ import java.util.List;
 public class QuoteController {
 
     @Autowired
-    private QuoteService quoteService;
+    private QuoteDAO quoteDAO;
 
     @RequestMapping(value = "/quotes", method = RequestMethod.GET)
     public ResponseEntity<List<Quote>>  listQuotes() {
-        List<Quote> quotes = quoteService.findAll();
+        List<Quote> quotes = quoteDAO.findAll();
         return new ResponseEntity<List<Quote>>(quotes, HttpStatus.OK);
     }
 
     @GetMapping (value = "/quotes/{id}")
     public ResponseEntity<Quote> ListQuote(@PathVariable int id) throws QuoteNotFoundException {
-        Quote quote = quoteService.findById(id);
+        Quote quote = quoteDAO.findById(id);
         return new ResponseEntity<Quote>(quote, HttpStatus.OK);
     }
 
     @PostMapping(value = "/quotes")
     public ResponseEntity<Void> addQuote(@RequestBody Quote quote) {
-        int id = quoteService.save(quote);
+        int id = quoteDAO.save(quote);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

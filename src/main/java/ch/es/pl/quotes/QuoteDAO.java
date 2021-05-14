@@ -14,7 +14,7 @@ import java.sql.Statement;
 import java.util.List;
 
 @Repository
-public class QuoteService {
+public class QuoteDAO {
 
     @Autowired
     JdbcTemplate jdbcTemplate;

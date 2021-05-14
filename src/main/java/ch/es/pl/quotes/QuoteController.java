@@ -24,12 +24,8 @@ public class QuoteController {
 
     @GetMapping (value = "/quotes/{id}")
     public ResponseEntity<Quote> ListQuote(@PathVariable int id) throws QuoteNotFoundException {
-        try{
-            Quote quote = quoteService.findById(id);
-            return new ResponseEntity<Quote>(quote, HttpStatus.OK);
-        } catch (EmptyResultDataAccessException e) {
-           throw new QuoteNotFoundException(id);
-        }
+        Quote quote = quoteService.findById(id);
+        return new ResponseEntity<Quote>(quote, HttpStatus.OK);
     }
 
     @PostMapping(value = "/quotes")

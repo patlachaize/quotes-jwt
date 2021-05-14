@@ -31,17 +31,21 @@ public class QuoteService {
         );
     }
 
-    public Quote findById(int id) {
-        return jdbcTemplate.queryForObject(
-                "select * from quotes where id=?",
-                new Object[]{id},
-                (rs, rownum) ->
-                        new Quote(
-                                rs.getInt("id"),
-                                rs.getString("author"),
-                                rs.getString("citation")
-                        )
-        );
+    public Quote findById(int id) throws QuoteNotFoundException {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "select * from quotes where id=?",
+                    new Object[]{id},
+                    (rs, rownum) ->
+                            new Quote(
+                                    rs.getInt("id"),
+                                    rs.getString("author"),
+                                    rs.getString("citation")
+                            )
+            );
+        } catch (EmptyResultDataAccessException e) {
+            throw new QuoteNotFoundException(id);
+        }
     }
 
     public int save(Quote quote) {

@@ -26,7 +26,8 @@ public class QuoteDAO {
                         new Quote(
                                 rs.getInt("id"),
                                 rs.getString("author"),
-                                rs.getString("citation")
+                                rs.getString("citation"),
+                                rs.getString("submitter")
                         )
         );
     }
@@ -40,7 +41,8 @@ public class QuoteDAO {
                             new Quote(
                                     rs.getInt("id"),
                                     rs.getString("author"),
-                                    rs.getString("citation")
+                                    rs.getString("citation"),
+                                    rs.getString("submitter")
                             )
             );
         } catch (EmptyResultDataAccessException e) {
@@ -53,10 +55,12 @@ public class QuoteDAO {
         jdbcTemplate.update(
                 connection -> {
                     PreparedStatement ps = connection.prepareStatement(
-                            "insert into quotes (author,citation) values(?,?)",
+                            "insert into quotes (author,citation,submitter) values(?,?,?)",
                             Statement.RETURN_GENERATED_KEYS);
                     ps.setString(1,quote.getAuthor());
                     ps.setString(2,quote.getCitation());
+                    ps.setString(3,quote.getSubmitter());
+
                     return ps;
                 },
                 keyHolder

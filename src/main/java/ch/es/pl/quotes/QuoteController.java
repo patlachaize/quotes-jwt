@@ -1,5 +1,8 @@
 package ch.es.pl.quotes;
 
+import ch.es.pl.auth.LoginBean;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 public class QuoteController {
 
     @Autowired
@@ -17,6 +21,9 @@ public class QuoteController {
 
     @Autowired
     private QuoteService quoteService;
+
+    @Autowired
+    private LoginBean loginBean;
 
     @RequestMapping(value = "/quotes", method = RequestMethod.GET)
     public ResponseEntity<List<Quote>>  listQuotes() {
@@ -31,7 +38,9 @@ public class QuoteController {
     }
 
     @PostMapping(value = "/quotes")
+//    @Operation(summary = "Add a quote", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<Void> addQuote(@RequestBody Quote quote) {
+        quote.setSubmitter(loginBean.getLogin());
         int id = quoteDAO.save(quote);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
